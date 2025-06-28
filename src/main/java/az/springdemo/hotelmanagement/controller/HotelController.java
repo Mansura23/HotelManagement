@@ -22,24 +22,27 @@ public class HotelController {
     public List<Hotel> getHotels() {
         return hotelService.getAllHotels();
     }
+
     @GetMapping(path = "/{id}")
     public Hotel getHotelById(@PathVariable Long id) {
         return hotelService.getHotelById(id);
     }
+
     @PostMapping
     public Hotel saveHotel(@Valid @RequestBody Hotel hotel) {
         return hotelService.save(hotel);
     }
+
     @PutMapping(path = "/{id}")
-    public Hotel updateHotel(@Valid @PathVariable Long id,@RequestBody Hotel hotel) {
-       return hotelService.update(id, hotel);
+    public Hotel updateHotel(@Valid @PathVariable Long id, @RequestBody Hotel hotel) {
+        return hotelService.update(id, hotel);
     }
+
     @DeleteMapping(path = "/{id}")
     public void deleteHotel(@PathVariable Long id) {
         hotelService.delete(id);
 
     }
-
 
 
 }
