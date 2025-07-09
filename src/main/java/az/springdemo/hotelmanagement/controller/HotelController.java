@@ -1,11 +1,12 @@
 package az.springdemo.hotelmanagement.controller;
 
-import az.springdemo.hotelmanagement.entity.Hotel;
+import az.springdemo.hotelmanagement.dto.HotelDto;
 import az.springdemo.hotelmanagement.service.HotelService;
 import jakarta.validation.Valid;
+import lombok.SneakyThrows;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -17,32 +18,34 @@ public class HotelController {
         this.hotelService = hotelService;
     }
 
-
     @GetMapping
-    public List<Hotel> getHotels() {
-        return hotelService.getAllHotels();
+   public ResponseEntity<List<HotelDto>> getAllHotels() {
+        List<HotelDto> hotelDtos = hotelService.getAllHotels();
+        return new ResponseEntity<>(hotelDtos, HttpStatus.OK);
     }
 
-    @GetMapping(path = "/{id}")
-    public Hotel getHotelById(@PathVariable Long id) {
-        return hotelService.getHotelById(id);
-    }
+   @GetMapping("{id}")
+    public ResponseEntity<HotelDto> getHotelById(@PathVariable Long id) {
+        HotelDto hotelDto = hotelService.getHotelById(id);
+        return new ResponseEntity<>(hotelDto, HttpStatus.OK);
+   }
+   @PostMapping
+   @SneakyThrows
+    public ResponseEntity<HotelDto> createHotel(@RequestBody @Valid HotelDto hotelDto) {
+        hotelDto = hotelService.createHotel(hotelDto);
+        return new ResponseEntity<>(hotelDto, HttpStatus.OK);
+   }
+   @DeleteMapping("{id}")
+    public void deleteHotelById(@PathVariable Long id) {
+        hotelService.deleteHotelById(id);
+   }
+   @PutMapping("{id}")
+    public ResponseEntity<HotelDto> updateHotelById(@PathVariable Long id, @RequestBody @Valid HotelDto hotelDto) {
+        hotelDto=hotelService.updateHotel(hotelDto, id);
+        return new ResponseEntity<>(hotelDto, HttpStatus.OK);
+   }
 
-    @PostMapping
-    public Hotel saveHotel(@Valid @RequestBody Hotel hotel) {
-        return hotelService.save(hotel);
-    }
 
-    @PutMapping(path = "/{id}")
-    public Hotel updateHotel(@Valid @PathVariable Long id, @RequestBody Hotel hotel) {
-        return hotelService.update(id, hotel);
-    }
-
-    @DeleteMapping(path = "/{id}")
-    public void deleteHotel(@PathVariable Long id) {
-        hotelService.delete(id);
-
-    }
 
 
 }
